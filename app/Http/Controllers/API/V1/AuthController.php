@@ -25,11 +25,13 @@ class AuthController extends Controller
         if ($authorizeUser['success']) {
             return response()
                 ->json([
+                    'success' => true,
                     'message' => $authorizeUser['message']
                 ], $authorizeUser['code'])
                 ->withCookie(cookie('auth_token', $authorizeUser['token'], 60));
         }
         return response()->json([
+            'success' => false,
             'message' => $authorizeUser['message']
         ], $authorizeUser['code']);
     }

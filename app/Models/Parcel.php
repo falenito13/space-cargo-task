@@ -16,4 +16,5 @@ class Parcel extends Model
         'address',
         'comment'
     ];
+
 }

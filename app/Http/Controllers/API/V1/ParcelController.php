@@ -32,6 +32,7 @@ class ParcelController extends Controller
         );
         $parcel = $this->parcelService->storeParcel($parcelDTO);
         return response()->json([
+            'success' => true,
             'message' => $parcel['message']
         ]);
     }
@@ -47,6 +48,7 @@ class ParcelController extends Controller
         );
         $updatedParcel = $this->parcelService->updateParcel($parcelDTO, $parcel);
         return response()->json([
+            'success' => true,
             'message' => $updatedParcel['message']
         ]);
     }
