@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\V1\AuthController;
+use App\Http\Controllers\API\V1\ParcelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1', 'name' => 'v1'], function () {
     Route::post('/login', [AuthController::class, 'login']);
-});
-Route::middleware('auth')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::middleware('auth')->group(function () {
+        Route::group(['prefix' => 'parcel', 'name' => 'parcel', 'controller' => ParcelController::class], function () {
+            Route::post('/', 'store');
+            Route::put('/{parcel}', 'update');
+        });
+    });
 });
