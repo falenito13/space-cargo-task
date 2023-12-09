@@ -35,14 +35,14 @@ class RequestResponseLoggerMiddleware
 
     public function terminate($request, $response)
     {
+        static::$logData['service_work_time'] = now()->diffInMilliseconds(static::$logData['request_time']);
         $loggerService = new LoggerService();
         static::$logData['status_code'] = $response->getStatusCode();
-        $responseResult = json_decode($response->getContent(),true);
+        $responseResult = json_decode($response->getContent(), true);
         if (!$responseResult['success']) {
             static::$logData['error_message'] = $responseResult['message'];
         }
         static::$logData['response'] = $responseResult;
-        static::$logData['service_work_time'] = now()->diffInMilliseconds(static::$logData['request_time']);
         $requestResponseDTO = new RequestResponseDTO(
             method: static::$logData['method'], sessionId: static::$logData['session_id'], ipAddress: static::$logData['ip_address'],
             address: static::$logData['address'], errorMessage: static::$logData['error_message'] ?? null,
