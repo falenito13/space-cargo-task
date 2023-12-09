@@ -35,11 +35,11 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => $authorizeUser['message']
             ], $authorizeUser['code']);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage() . "Line:" . $e->getLine()
-            ]);
+            ], $e->getCode());
         }
     }
 }

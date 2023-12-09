@@ -36,11 +36,11 @@ class ParcelController extends Controller
                 'success' => true,
                 'message' => $parcel['message']
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage() . "Line:" . $e->getLine()
-            ]);
+            ], $e->getCode());
         }
     }
 
@@ -52,18 +52,18 @@ class ParcelController extends Controller
                 price: $request->price,
                 quantity: $request->quantity,
                 address: $request->address,
-                comment: $request->comment
+                comment: $request->comment,
             );
             $updatedParcel = $this->parcelService->updateParcel($parcelDTO, $parcel);
             return response()->json([
                 'success' => true,
                 'message' => $updatedParcel['message']
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage() . "Line:" . $e->getLine()
-            ]);
+            ], $e->getCode());
         }
     }
 

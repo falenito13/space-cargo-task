@@ -37,11 +37,11 @@ class RequestResponseLoggerMiddleware
     {
         $loggerService = new LoggerService();
         static::$logData['status_code'] = $response->getStatusCode();
-
-        if (!json_decode($response->getContent())->success) {
-            static::$logData['error_message'] = !$response->getContent()['message'];
+        $responseResult = json_decode($response->getContent(),true);
+        if (!$responseResult['success']) {
+            static::$logData['error_message'] = $responseResult['message'];
         }
-        static::$logData['response'] = json_decode($response->getContent(),true);
+        static::$logData['response'] = $responseResult;
         static::$logData['service_work_time'] = now()->diffInMilliseconds(static::$logData['request_time']);
         $requestResponseDTO = new RequestResponseDTO(
             method: static::$logData['method'], sessionId: static::$logData['session_id'], ipAddress: static::$logData['ip_address'],
