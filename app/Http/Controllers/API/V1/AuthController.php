@@ -20,19 +20,26 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
     {
-        $loginCredentialsDTO = new LoginCredentialsDTO($request->email, $request->password);
-        $authorizeUser = $this->authService->login($loginCredentialsDTO);
-        if ($authorizeUser['success']) {
-            return response()
-                ->json([
-                    'success' => true,
-                    'message' => $authorizeUser['message']
-                ], $authorizeUser['code'])
-                ->withCookie(cookie('auth_token', $authorizeUser['token'], 60));
+        try {
+            $loginCredentialsDTO = new LoginCredentialsDTO($request->email, $request->password);
+            $authorizeUser = $this->authService->login($loginCredentialsDTO);
+            if ($authorizeUser['success']) {
+                return response()
+                    ->json([
+                        'success' => true,
+                        'message' => $authorizeUser['message']
+                    ], $authorizeUser['code'])
+                    ->withCookie(cookie('auth_token', $authorizeUser['token'], 60));
+            }
+            return response()->json([
+                'success' => false,
+                'message' => $authorizeUser['message']
+            ], $authorizeUser['code']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage() . "Line:" . $e->getLine()
+            ]);
         }
-        return response()->json([
-            'success' => false,
-            'message' => $authorizeUser['message']
-        ], $authorizeUser['code']);
     }
 }

@@ -23,34 +23,48 @@ class ParcelController extends Controller
 
     public function store(ParcelStoreRequest $request): JsonResponse
     {
-        $parcelDTO = new ParcelDTO(
-            code: $request->code,
-            price: $request->price,
-            quantity: $request->quantity,
-            address: $request->address,
-            comment: $request->comment
-        );
-        $parcel = $this->parcelService->storeParcel($parcelDTO);
-        return response()->json([
-            'success' => true,
-            'message' => $parcel['message']
-        ]);
+        try {
+            $parcelDTO = new ParcelDTO(
+                code: $request->code,
+                price: $request->price,
+                quantity: $request->quantity,
+                address: $request->address,
+                comment: $request->comment
+            );
+            $parcel = $this->parcelService->storeParcel($parcelDTO);
+            return response()->json([
+                'success' => true,
+                'message' => $parcel['message']
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage() . "Line:" . $e->getLine()
+            ]);
+        }
     }
 
     public function update(ParcelUpdateRequest $request, Parcel $parcel): JsonResponse
     {
-        $parcelDTO = new ParcelDTO(
-            code: $request->code,
-            price: $request->price,
-            quantity: $request->quantity,
-            address: $request->address,
-            comment: $request->comment
-        );
-        $updatedParcel = $this->parcelService->updateParcel($parcelDTO, $parcel);
-        return response()->json([
-            'success' => true,
-            'message' => $updatedParcel['message']
-        ]);
+        try {
+            $parcelDTO = new ParcelDTO(
+                code: $request->code,
+                price: $request->price,
+                quantity: $request->quantity,
+                address: $request->address,
+                comment: $request->comment
+            );
+            $updatedParcel = $this->parcelService->updateParcel($parcelDTO, $parcel);
+            return response()->json([
+                'success' => true,
+                'message' => $updatedParcel['message']
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage() . "Line:" . $e->getLine()
+            ]);
+        }
     }
 
 }
